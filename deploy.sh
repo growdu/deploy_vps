@@ -5,17 +5,19 @@ then
     pass="test"
 fi
 sudo apt install shadowsocks-libev -y
-sudo bash -c 'cat << "EOF" > /etc/shadowsocks-libev/config.json
+conf="
 {
-    "server":"0.0.0.0",
-    "mode":"tcp_and_udp",
-    "server_port":10024,
-    "local_port":1080,
-    "password":"${pass}",
-    "timeout":60,
-    "method":"chacha20-ietf-poly1305"
+    \"server\":\"0.0.0.0\",
+    \"mode\":\"tcp_and_udp\",
+    \"server_port\":10024,
+    \"local_port\":1080,
+    \"password\":\"${pass}\",
+    \"timeout\":60,
+    \"method\":\"chacha20-ietf-poly1305\"
 }
-EOF'
+"
+echo "${conf}" > /etc/shadowsocks-libev/config.json
 sudo systemctl restart shadowsocks-libev.service
 sudo ufw allow 10024
 sudo systemctl restart shadowsocks-libev.service
+sudo systemctl status shadowsocks-libev.service
